@@ -1,67 +1,60 @@
-import Image from "next/image";
-import UploadIcon from "@src/source/upload-icon.svg";
-import { Container, Files, Main, Upload, UploadInput } from "./style.css";
-import { useState } from "react";
-import { UploadFile } from "@src/utils/upload-file";
+import React from "react";
+import { CircleNotch } from "phosphor-react";
+import { Container, Main, Upload } from "./style.css";
+import { UploadFile } from "@src/utils/file/upload-file";
+import { fileExtends } from "../api/config/multer-config";
+import { UploadInputs } from "./components/Upload/inputs";
+import { AwaitFiles } from "./components/Upload/awaitFiles";
+import { ReadyFiles } from "./components/Upload/readyFiles";
 
 export interface filesProps extends File {
+  status: "await" | "uploading" | "uploaded";
   error: string;
   loading: boolean;
+  infos: fileExtends;
+}
+
+export interface handleDeleteFileProps {
+  file: filesProps;
 }
 
 export default function Home() {
-  const [onDrag, setOnDrag] = useState(false);
-  const [filesList, setFilesList] = useState<filesProps[]>([]);
+  const [filesList, setFilesList] = React.useState<filesProps[]>([]);
+  const [loading, setLoading] = React.useState(false);
 
-  function handleDrag() {
-    setOnDrag(!onDrag);
+  async function handleUpdateFile() {
+    setLoading(true);
+    await UploadFile({ awaitFiles, filesList, setFilesList });
+    setLoading(false);
   }
 
-  async function handleFiles({ target }: React.ChangeEvent<HTMLInputElement>) {
-    const files = Array.from(target.files!) as filesProps[];
-    UploadFile({ files, setFilesList });
-    setOnDrag(false);
-
-    target.value = "";
-  }
+  const existError = filesList.find((index) => index.error) || false;
+  const awaitFiles =
+    filesList.filter(({ status }) => status === "await") || null;
 
   return (
     <Main>
       <Container>
         <h1>Upload de arquivos</h1>
         <Upload>
-          <UploadInput>
-            <input
-              type="file"
-              id="uploadFile"
-              onChange={handleFiles}
-              onDragEnterCapture={handleDrag}
-              onDragLeaveCapture={handleDrag}
-              multiple
-            />
-            <label htmlFor="uploadFile">
-              <Image src={UploadIcon} alt="upload icon" />
-              {!onDrag && (
-                <>
-                  <span>
-                    Arraste e solte arquivos ou <strong>Clique aqui</strong>
-                  </span>
-                  <p>Supormatos os formatos: JPEG, PNG e GIF</p>
-                </>
-              )}
-            </label>
-          </UploadInput>
-          <button disabled>FAZER UPLOAD DE ARQUIVOS</button>
+          <UploadInputs setFilesList={setFilesList} />
+          <AwaitFiles
+            awaitFiles={awaitFiles}
+            filesList={filesList}
+            setFilesList={setFilesList}
+          />
+          <ReadyFiles filesList={filesList} />
+          <button
+            disabled={!awaitFiles.length || !!existError || loading}
+            onClick={handleUpdateFile}
+          >
+            {loading ? (
+              <CircleNotch size={18} className="loading-circle" />
+            ) : (
+              "FAZER UPLOAD DE ARQUIVOS"
+            )}
+          </button>
         </Upload>
-        <Files>
-          {filesList.map((index, key) => (
-            <div key={key}>
-              <h1>{index.name}</h1>
-              <span>{index.error}</span>
-              <span>{index.loading && "Loading..."}</span>
-            </div>
-          ))}
-        </Files>
       </Container>
     </Main>
   );

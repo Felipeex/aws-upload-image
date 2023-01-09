@@ -1,4 +1,9 @@
-import { styled } from "stitches.config";
+import { keyframes, styled } from "stitches.config";
+
+const loadingAnimation = keyframes({
+  "0%": { transform: "rotate(0deg)" },
+  "100%": { transform: "rotate(360deg)" },
+});
 
 export const Main = styled("main", {
   height: "100vh",
@@ -6,6 +11,10 @@ export const Main = styled("main", {
   display: "flex",
   alignItems: "center",
   justifyContent: "center",
+
+  ".loading-circle": {
+    animation: `${loadingAnimation} 0.5s linear infinite`,
+  },
 });
 
 export const Container = styled("section", {
@@ -48,9 +57,15 @@ export const Upload = styled("section", {
     fontWeight: 700,
     fontSize: "14px",
     lineHeight: "20px",
+    cursor: "pointer",
+
+    display: "flex",
+    alignItems: "center",
+    justifyContent: "center",
 
     "&:disabled": {
       opacity: "0.5",
+      cursor: "",
     },
   },
 });
@@ -105,6 +120,47 @@ export const UploadInput = styled("div", {
 });
 
 export const Files = styled("div", {
+  width: "100%",
+  height: "auto",
+  maxHeight: "200px",
   display: "flex",
   flexDirection: "column",
+  gap: "10px",
+
+  overflow: "auto",
+
+  paddingRight: "5px",
+
+  "&::-webkit-scrollbar": {
+    width: "0.2rem",
+  },
+
+  "&::-webkit-scrollbar-track": {
+    background: "transparent",
+  },
+
+  "&::-webkit-scrollbar-thumb": {
+    borderRadius: "2rem",
+    background: "$gray-500",
+  },
+});
+
+export const File = styled("div", {
+  "span:nth-child(2)": {
+    color: "$red-900",
+    fontWeight: 500,
+    fontSize: "12px",
+    lineHeight: "18px",
+  },
+});
+
+export const FilesTitle = styled("span", {
+  width: "100%",
+  textAlign: "left",
+  fontWeight: 700,
+  fontSize: "14px",
+  lineHeight: "18px",
+  color: "$gray-500",
+
+  margin: "10px 0",
 });

@@ -13,6 +13,7 @@ export const {
   theme: {
     colors: {
       "black-900": "#0F0F0F",
+      "green-900": "#11AF22",
 
       "purple-900": "#483EA8",
       "purple-800": "#384EB7",

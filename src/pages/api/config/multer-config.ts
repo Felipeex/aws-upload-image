@@ -4,9 +4,11 @@ import path from "path";
 import crypto from "node:crypto";
 import multerS3 from "multer-s3";
 import { S3Client } from "@aws-sdk/client-s3";
+import { fileConfig } from "@src/utils/file/config-file";
 
 export interface fileExtends extends Express.Multer.File {
   key: string;
+  location: string;
 }
 
 const storageType = {
@@ -46,17 +48,12 @@ const storageType = {
 
 export const multerConfig: Options = {
   dest: path.join(__dirname, "..", "/"),
-  storage: storageType.local,
+  storage: storageType.s3,
   limits: {
-    fileSize: 11 * 1024 * 1024,
+    fileSize: fileConfig.maxSize,
   },
   fileFilter: (req, file, cb) => {
-    const allowedMimes = [
-      "image/jpeg",
-      "image/pjpeg",
-      "image/png",
-      "image/gif",
-    ];
+    const allowedMimes = fileConfig.types;
 
     if (allowedMimes.includes(file.mimetype)) {
       cb(null, true);
