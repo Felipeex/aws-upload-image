@@ -7,8 +7,6 @@ Aqui também fica um exemplo de uso do S3, provider da AWS e também uso do mult
 Esse projeto foi desenvolvido com as seguintes tecnologias:
 #### Stack
 - Next JS
-- Prisma
-- Next-Auth
 #### Infraestrutura
 - AWS/S3 - Upload File
 #### Bibliotecas/Tecnologias
