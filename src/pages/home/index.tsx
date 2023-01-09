@@ -21,7 +21,6 @@ export interface handleDeleteFileProps {
 export default function Home() {
   const [filesList, setFilesList] = React.useState<filesProps[]>([]);
   const [loading, setLoading] = React.useState(false);
-
   async function handleUpdateFile() {
     setLoading(true);
     await UploadFile({ awaitFiles, filesList, setFilesList });

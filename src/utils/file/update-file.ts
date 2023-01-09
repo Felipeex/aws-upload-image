@@ -1,12 +1,13 @@
 import { filesProps } from "@src/pages/home";
 import { deleteFileProps } from "./delete-file";
 
-interface updateFileProps extends Omit<deleteFileProps, "file"> {
+interface updateFileProps extends deleteFileProps {
   status: filesProps["status"];
   infos: filesProps["infos"];
 }
 
 export function updateStatusFile({
+  file,
   allFiles,
   setFilesList,
   status,
@@ -14,8 +15,10 @@ export function updateStatusFile({
 }: updateFileProps) {
   let filesUpdated: filesProps[] = [];
   allFiles.forEach(async (index) => {
-    index.status = status;
-    index.infos = infos;
+    if (allFiles.indexOf(index) === allFiles.indexOf(file)) {
+      index.infos = infos;
+      index.status = status;
+    }
     filesUpdated.push(index);
   });
   setFilesList(filesUpdated);

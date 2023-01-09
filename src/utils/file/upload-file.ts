@@ -25,6 +25,7 @@ export function UploadFile({
           formData
         );
         updateStatusFile({
+          file: index,
           allFiles: filesList,
           setFilesList,
           status: "uploaded",
