@@ -30,7 +30,7 @@ const storageType = {
         secretAccessKey: process.env.AWSS3_SECRET_ACCESS_KEY!,
         accessKeyId: process.env.AWSS3_ACCESS_KEY_ID!,
       },
-      region: process.env.AWS_DEFAULT_REGION,
+      region: process.env.AWSS3_DEFAULT_REGION,
     }),
     bucket: process.env.AWSS3_BUCKET!,
     contentType: multerS3.AUTO_CONTENT_TYPE,
